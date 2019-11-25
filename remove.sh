@@ -1,5 +1,7 @@
  #!/bin/bash
  
+ 
+#Function writes file path to restore.info and moves file to recycle bin
 function movetoRC() {
       inode=$(stat -c%i $filename)
       basename=$(basename $filename)
@@ -13,6 +15,7 @@ function movetoRC() {
 
 }
 
+#Checks if the recycling bin exists, if not creates it
 function createdelete() {
       if ! [ -d $HOME/deleted ]
        then
@@ -21,6 +24,7 @@ function createdelete() {
       fi
 }
 
+#Checks if file name provided is a directory
 function provideddir() {
        if [ -d $filename ]
        then
@@ -29,6 +33,7 @@ function provideddir() {
        fi
 }
 
+#Checks if file exists
 function notexist() {
       if ! [ -e $filename ]
        then
@@ -37,6 +42,7 @@ function notexist() {
       fi
 }
 
+#Checks if the user is trying to remove the remove script
 function delete() {
        if [[ $filename = *project/remove.sh ]] || [[ $filename = remove.sh ]] || [[ $filename = */remove.sh ]]
       then
@@ -45,6 +51,7 @@ function delete() {
        fi
 	   }
 
+#Function same as the interactive option for rm 
 function interactive() {
       if [ $opti -eq 1 ]
       then
@@ -59,6 +66,7 @@ function interactive() {
       fi
  }
 
+ #Function same as the verbose option for rm
 function verbose() {
       if [[ $optv -eq 1 ]] && ! [[ -e $filename ]]
        then
@@ -66,6 +74,7 @@ function verbose() {
      fi
  }
 
+#Function same as the recursive option for rm
 function recursive() {
       if [[ $optr -eq 1 ]] && [[ -d $filename ]]
       then
@@ -103,12 +112,14 @@ done
 
 shift $[$OPTIND -1]
 
+#Checks if a file name is provided
 if [ $# -eq 0 ]
  then
       echo "Error, no file provided"
       exit 2
  fi
 
+#Multiple arguments are able to be provided
 for filename in "$@"
 do
       createdelete
